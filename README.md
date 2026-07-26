@@ -2,6 +2,8 @@
 
 Đồ án Flask + Bootstrap 5 + Microsoft SQL Server dành cho môn Hệ quản trị cơ sở dữ liệu.
 
+Hướng dẫn chi tiết cho máy mới: [HUONG_DAN_CAI_DAT.md](HUONG_DAN_CAI_DAT.md)
+
 ## Chức năng
 
 - Đăng ký, đăng nhập và ba vai trò: customer, vendor, admin.
