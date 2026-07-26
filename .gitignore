@@ -1,0 +1,11 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+instance/config.py
+app/static/uploads/products/*
+!app/static/uploads/products/.gitkeep
+

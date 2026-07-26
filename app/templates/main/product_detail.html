@@ -1,0 +1,30 @@
+{% extends "layouts/base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div class="row g-5">
+    <div class="col-md-6">
+        {% if product.image_filename %}<img class="img-fluid rounded shadow-sm w-100 detail-image" src="{{ url_for('static', filename='uploads/products/' + product.image_filename) }}" alt="{{ product.name }}">
+        {% else %}<div class="product-placeholder detail-image rounded d-flex align-items-center justify-content-center">Không có ảnh</div>{% endif %}
+    </div>
+    <div class="col-md-6">
+        <span class="badge text-bg-light">{{ product.category.name }}</span>
+        <h1 class="mt-2">{{ product.name }}</h1>
+        <p class="text-muted">Cửa hàng: {{ product.vendor.store_name or product.vendor.full_name }}</p>
+        <div class="fs-3 text-danger fw-bold mb-3">{{ "{:,.0f}".format(product.price) }} ₫</div>
+        <p>{{ product.description or "Chưa có mô tả." }}</p>
+        <p>Còn lại: <strong>{{ product.stock }}</strong> | Đánh giá: <strong>{{ product.average_rating }}/5</strong></p>
+        <form class="d-flex gap-2" method="post" action="{{ url_for('customer.cart_add', product_id=product.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input class="form-control quantity-input" type="number" name="quantity" min="1" max="{{ product.stock }}" value="1">
+            <button class="btn btn-primary" {% if product.stock == 0 %}disabled{% endif %}>Thêm vào giỏ</button>
+        </form>
+    </div>
+</div>
+<hr class="my-5">
+<div class="d-flex justify-content-between"><h2 class="h4">Đánh giá</h2>
+{% if current_user.is_authenticated and current_user.role == 'customer' %}<a href="{{ url_for('customer.review', product_id=product.id) }}">Viết đánh giá</a>{% endif %}</div>
+{% for review in product.reviews %}
+<div class="border-bottom py-3"><strong>{{ review.customer.full_name }}</strong> <span class="text-warning">{{ "★" * review.rating }}</span><p class="mb-0">{{ review.comment }}</p></div>
+{% else %}<p class="text-muted">Chưa có đánh giá.</p>{% endfor %}
+{% endblock %}
+

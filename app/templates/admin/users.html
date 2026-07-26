@@ -1,0 +1,9 @@
+{% extends "layouts/base.html" %}
+{% block title %}Quản lý tài khoản{% endblock %}
+{% block content %}
+<h1 class="h2 mb-4">Quản lý tài khoản</h1>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Họ tên</th><th>Email</th><th>Vai trò</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+{% for user in users %}<tr><td>{{ user.full_name }}</td><td>{{ user.email }}</td><td>{{ user.role }}</td><td>{{ 'Hoạt động' if user.is_active else 'Đã khóa' }}</td><td>{% if user.role != 'admin' %}<form method="post" action="{{ url_for('admin.user_toggle', user_id=user.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-{{ 'danger' if user.is_active else 'success' }}">{{ 'Khóa' if user.is_active else 'Mở khóa' }}</button></form>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}
+

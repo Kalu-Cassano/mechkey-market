@@ -1,0 +1,5 @@
+{% extends "layouts/base.html" %}
+{% from "components/_form_fields.html" import render_field %}
+{% block title %}Đánh giá sản phẩm{% endblock %}
+{% block content %}<div class="col-lg-6 mx-auto"><h1 class="h3">Đánh giá {{ product.name }}</h1><form method="post" class="card card-body mt-3">{{ form.hidden_tag() }}{{ render_field(form.rating) }}{{ render_field(form.comment) }}{{ form.submit(class="btn btn-primary") }}</form></div>{% endblock %}
+

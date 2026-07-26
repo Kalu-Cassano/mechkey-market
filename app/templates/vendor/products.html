@@ -1,0 +1,9 @@
+{% extends "layouts/base.html" %}
+{% block title %}Sản phẩm của tôi{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-4"><h1 class="h2">Sản phẩm của tôi</h1><a class="btn btn-primary" href="{{ url_for('vendor.product_create') }}">Thêm sản phẩm</a></div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Tên</th><th>Danh mục</th><th>Giá</th><th>Kho</th><th>Trạng thái</th><th></th></tr></thead><tbody>
+{% for product in products %}<tr><td>{{ product.name }}</td><td>{{ product.category.name }}</td><td>{{ "{:,.0f}".format(product.price) }} ₫</td><td>{{ product.stock }}</td><td><span class="badge text-bg-{{ 'success' if product.is_active else 'secondary' }}">{{ 'Đang bán' if product.is_active else 'Đã ẩn' }}</span></td><td><div class="d-flex gap-1"><a class="btn btn-sm btn-outline-primary" href="{{ url_for('vendor.product_edit', product_id=product.id) }}">Sửa</a><form method="post" action="{{ url_for('vendor.product_delete', product_id=product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-danger" data-confirm="Bạn chắc chắn muốn xoá sản phẩm này?">Xoá</button></form></div></td></tr>
+{% else %}<tr><td colspan="6">Bạn chưa có sản phẩm.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

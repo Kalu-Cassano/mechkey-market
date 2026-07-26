@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}
+{% block title %}MechKey Market - Trang chủ{% endblock %}
+{% block content %}
+<section class="hero rounded-4 p-5 mb-5 text-white">
+    <div class="col-lg-7">
+        <h1 class="display-5 fw-bold">Mua sắm từ nhiều cửa hàng trong một nơi</h1>
+        <p class="lead">Marketplace đơn giản, minh bạch và dễ sử dụng.</p>
+        <a class="btn btn-light btn-lg" href="{{ url_for('main.products') }}">Khám phá sản phẩm</a>
+    </div>
+</section>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h3">Sản phẩm mới</h2>
+    <a href="{{ url_for('main.products') }}">Xem tất cả</a>
+</div>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+    {% for product in products %}{% include "components/_product_card.html" %}{% else %}<p>Chưa có sản phẩm.</p>{% endfor %}
+</div>
+{% endblock %}

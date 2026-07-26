@@ -1,0 +1,12 @@
+{% extends "layouts/base.html" %}
+{% from "components/_form_fields.html" import render_field %}
+{% block title %}Thanh toán{% endblock %}
+{% block content %}
+<h1 class="h2 mb-4">Xác nhận đặt hàng</h1>
+<div class="row g-4"><div class="col-lg-7"><div class="card"><div class="card-body">
+<form method="post">{{ form.hidden_tag() }}{{ render_field(form.shipping_address) }}{{ render_field(form.phone) }}{{ render_field(form.payment_method) }}<div class="alert alert-info small">Thanh toán chuyển khoản trong đồ án được mô phỏng: hệ thống sẽ tạo mã giao dịch và đánh dấu đã thanh toán. Không phát sinh giao dịch ngân hàng thật.</div>{{ form.submit(class="btn btn-primary") }}</form>
+</div></div></div><div class="col-lg-5"><div class="card"><div class="card-body"><h2 class="h5">Đơn hàng</h2>
+{% for item in items %}<div class="d-flex justify-content-between py-2 border-bottom"><span>{{ item.product.name }} × {{ item.quantity }}</span><span>{{ "{:,.0f}".format(item.subtotal) }} ₫</span></div>{% endfor %}
+<div class="d-flex justify-content-between pt-3 fw-bold"><span>Tổng cộng</span><span class="text-danger">{{ "{:,.0f}".format(total) }} ₫</span></div>
+</div></div></div></div>
+{% endblock %}

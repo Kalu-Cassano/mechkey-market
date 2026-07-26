@@ -1,0 +1,11 @@
+{% extends "layouts/base.html" %}
+{% block title %}Kênh người bán{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-4"><h1 class="h2">Kênh người bán</h1><a class="btn btn-primary" href="{{ url_for('vendor.product_create') }}">Thêm sản phẩm</a></div>
+<div class="row g-3 mb-4"><div class="col-md-6"><div class="stat-card"><span>Sản phẩm</span><strong>{{ products_count }}</strong></div></div><div class="col-md-6"><div class="stat-card"><span>Doanh thu ghi nhận</span><strong>{{ "{:,.0f}".format(sales) }} ₫</strong></div></div></div>
+<div class="d-flex justify-content-between"><h2 class="h4">Đơn hàng gần đây</h2><a href="{{ url_for('vendor.products') }}">Quản lý sản phẩm</a></div>
+<div class="table-responsive"><table class="table"><thead><tr><th>Đơn</th><th>Sản phẩm</th><th>SL</th><th>Trạng thái</th></tr></thead><tbody>
+{% for item in recent_items %}<tr><td>#{{ item.order.id }}</td><td>{{ item.product_name }}</td><td>{{ item.quantity }}</td><td>{{ item.order.status }}</td></tr>{% else %}<tr><td colspan="4">Chưa có đơn hàng.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}
+

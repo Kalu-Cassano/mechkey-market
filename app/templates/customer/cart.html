@@ -1,0 +1,18 @@
+{% extends "layouts/base.html" %}
+{% block title %}Giỏ hàng{% endblock %}
+{% block content %}
+<h1 class="h2 mb-4">Giỏ hàng</h1>
+{% if items %}
+<div class="table-responsive"><table class="table align-middle">
+<thead><tr><th>Sản phẩm</th><th>Giá</th><th>Số lượng</th><th>Tạm tính</th><th></th></tr></thead>
+<tbody>{% for item in items %}<tr>
+<td><a href="{{ url_for('main.product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a></td>
+<td>{{ "{:,.0f}".format(item.product.price) }} ₫</td>
+<td><form class="d-flex gap-2" method="post" action="{{ url_for('customer.cart_update', product_id=item.product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input class="form-control quantity-input" type="number" name="quantity" min="0" max="{{ item.product.stock }}" value="{{ item.quantity }}"><button class="btn btn-sm btn-outline-primary">Cập nhật</button></form></td>
+<td>{{ "{:,.0f}".format(item.subtotal) }} ₫</td>
+<td><form method="post" action="{{ url_for('customer.cart_remove', product_id=item.product.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-danger">Xóa</button></form></td>
+</tr>{% endfor %}</tbody></table></div>
+<div class="text-end"><h4>Tổng: <span class="text-danger">{{ "{:,.0f}".format(total) }} ₫</span></h4><a class="btn btn-primary mt-2" href="{{ url_for('customer.checkout') }}">Tiến hành đặt hàng</a></div>
+{% else %}<div class="alert alert-info">Giỏ hàng đang trống. <a href="{{ url_for('main.products') }}">Tiếp tục mua sắm</a>.</div>{% endif %}
+{% endblock %}
+

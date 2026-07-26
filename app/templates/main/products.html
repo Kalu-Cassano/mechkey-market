@@ -1,0 +1,19 @@
+{% extends "layouts/base.html" %}
+{% block title %}Sản phẩm{% endblock %}
+{% block content %}
+<h1 class="h2 mb-4">Danh sách sản phẩm</h1>
+<form class="row g-2 mb-4">
+    <div class="col-md-7"><input class="form-control" name="q" value="{{ search }}" placeholder="Tìm tên hoặc mô tả..."></div>
+    <div class="col-md-3">
+        <select class="form-select" name="category">
+            <option value="">Tất cả danh mục</option>
+            {% for category in categories %}<option value="{{ category.id }}" {% if selected_category == category.id %}selected{% endif %}>{{ category.name }}</option>{% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2"><button class="btn btn-primary w-100">Tìm kiếm</button></div>
+</form>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+    {% for product in products %}{% include "components/_product_card.html" %}{% else %}<div class="col-12"><div class="alert alert-info">Không tìm thấy sản phẩm phù hợp.</div></div>{% endfor %}
+</div>
+{% endblock %}
+

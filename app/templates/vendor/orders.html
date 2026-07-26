@@ -1,0 +1,43 @@
+{% extends "layouts/base.html" %}
+{% block title %}Đơn hàng cửa hàng{% endblock %}
+{% block content %}
+<h1 class="h2 mb-4">Đơn hàng của cửa hàng</h1>
+<div class="table-responsive">
+<table class="table align-middle bg-white">
+    <thead><tr><th>Đơn</th><th>Khách hàng</th><th>Sản phẩm</th><th>SL</th><th>Thanh toán</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+    <tbody>
+    {% for item in items %}
+    <tr>
+        <td>#{{ item.order.id }}<div class="small text-muted">{{ item.order.created_at.strftime('%d/%m/%Y %H:%M') }}</div></td>
+        <td>{{ item.order.customer.full_name }}<div class="small">{{ item.order.phone }}</div></td>
+        <td>{{ item.product_name }}<div class="small text-muted">{{ "{:,.0f}".format(item.unit_price) }} ₫</div></td>
+        <td>{{ item.quantity }}</td>
+        <td>
+            {% if item.order.payment %}
+            <span class="badge text-bg-{{ 'success' if item.order.payment.status == 'Paid' else 'warning' }}">{{ item.order.payment.status }}</span>
+            <div class="small">{{ item.order.payment.method }}</div>
+            {% else %}<span class="text-muted">Chưa có</span>{% endif %}
+        </td>
+        <td><span class="badge text-bg-{{ 'danger' if item.status == 'Cancelled' else 'primary' }}">{{ item.status }}</span></td>
+        <td>
+            {% set actions = {
+                'Pending': [('Confirmed', 'Xác nhận', 'success'), ('Cancelled', 'Huỷ', 'danger')],
+                'Confirmed': [('Shipping', 'Giao hàng', 'primary'), ('Cancelled', 'Huỷ', 'danger')],
+                'Shipping': [('Completed', 'Hoàn tất', 'success')]
+            } %}
+            <div class="d-flex flex-wrap gap-1">
+            {% for status, label, color in actions.get(item.status, []) %}
+            <form method="post" action="{{ url_for('vendor.order_item_status', item_id=item.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="status" value="{{ status }}">
+                <button class="btn btn-sm btn-outline-{{ color }}" {% if status == 'Cancelled' %}data-confirm="Bạn chắc chắn muốn huỷ phần đơn hàng này?"{% endif %}>{{ label }}</button>
+            </form>
+            {% else %}<span class="small text-muted">Không còn thao tác</span>{% endfor %}
+            </div>
+        </td>
+    </tr>
+    {% else %}<tr><td colspan="7" class="text-center py-4">Cửa hàng chưa có đơn hàng.</td></tr>{% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

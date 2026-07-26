@@ -1,0 +1,8 @@
+{% extends "layouts/base.html" %}
+{% block title %}Quản lý đơn hàng{% endblock %}
+{% block content %}
+<h1 class="h2 mb-4">Quản lý đơn hàng</h1>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Mã</th><th>Khách hàng</th><th>Ngày</th><th>Tổng tiền</th><th>Thanh toán</th><th>Trạng thái</th></tr></thead><tbody>
+{% for order in orders %}<tr><td>#{{ order.id }}</td><td>{{ order.customer.full_name }}</td><td>{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</td><td>{{ "{:,.0f}".format(order.total_amount) }} ₫</td><td>{% if order.payment %}<span class="badge text-bg-{{ 'success' if order.payment.status == 'Paid' else 'warning' }}">{{ order.payment.status }}</span><div class="small">{{ order.payment.method }}</div>{% else %}—{% endif %}</td><td><form class="d-flex gap-2" method="post" action="{{ url_for('admin.order_status', order_id=order.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><select class="form-select form-select-sm" name="status">{% for status in ['Pending','Confirmed','Shipping','Completed','Cancelled'] %}<option {% if order.status == status %}selected{% endif %}>{{ status }}</option>{% endfor %}</select><button class="btn btn-sm btn-outline-primary">Lưu</button></form></td></tr>{% else %}<tr><td colspan="6">Chưa có đơn hàng.</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}
